@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información del Vino</title>
+</head>
+<body>
+    <h1>Información del Vino</h1>
+    <div id="vino-info"></div>
+    <h2>Catas</h2>
+    <ul id="catas-list"></ul>
+
+    <script>
+        async function fetchVino(id) {
+            const response = await fetch(`/vinos/${id}`);
+            const vino = await response.json();
+            const vinoInfo = document.getElementById('vino-info');
+
+            vinoInfo.innerHTML = `
+                <p>Nombre: ${vino.nombre}</p>
+                <p>Año: ${vino.anio}</p>
+                <p>Tipo: ${vino.tipo}</p>
+                <p>Precio: ${vino.precio}</p>
+                <p>Stock: ${vino.stock}</p>
+                <img src="${vino.imagen}" alt="Imagen del vino ${vino.nombre}">
+            `;
+
+            // Fetch catas
+            const catasResponse = await fetch(`/catas?vinoId=${id}`);
+            const catas = await catasResponse.json();
+            const catasList = document.getElementById('catas-list');
+
+            catas.forEach(cata => {
+                const cataItem = document.createElement('li');
+                cataItem.textContent = `Nota: ${cata.nota}, Comentario: ${cata.comentario}`;
+                catasList.appendChild(cataItem);
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const vinoId = urlParams.get('id');
+        fetchVino(vinoId);
+    </script>
+</body>
+</html>

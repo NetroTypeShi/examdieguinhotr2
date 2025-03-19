@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinos de la Bodega</title>
+</head>
+<body>
+    <h1>Vinos de la Bodega</h1>
+    <ul id="vinos-list"></ul>
+
+    <script>
+        async function fetchVinos() {
+            const response = await fetch('/vinos');
+            const vinos = await response.json();
+            const vinosList = document.getElementById('vinos-list');
+
+            vinos.forEach(vino => {
+                const vinoItem = document.createElement('li');
+                vinoItem.textContent = `Nombre: ${vino.nombre}, Año: ${vino.año}, Tipo: ${vino.tipo}, Precio: ${vino.precio}`;
+                vinosList.appendChild(vinoItem);
+            });
+        }
+
+        fetchVinos();
+    </script>
+</body>
+</html>

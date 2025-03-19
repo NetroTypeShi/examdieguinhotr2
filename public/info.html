@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de la Bodega</title>
+</head>
+<body>
+    <h1>Información de la Bodega</h1>
+    <h2>Vinos</h2>
+    <table id="vinos-table" border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Año</th>
+                <th>Tipo</th>
+                <th>Precio</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Catas</h2>
+    <ul id="catas-list"></ul>
+
+    <script>
+        async function fetchVinos() {
+            const response = await fetch('/vinos');
+            const vinos = await response.json();
+            const vinosTableBody = document.querySelector('#vinos-table tbody');
+
+            vinos.forEach(vino => {
+                const vinoRow = document.createElement('tr');
+                vinoRow.innerHTML = `
+                    <td>${vino.nombre}</td>
+                    <td>${vino.año}</td>
+                    <td>${vino.tipo}</td>
+                    <td>${vino.precio}</td>
+                    <td>${vino.stock}</td>
+                `;
+                vinosTableBody.appendChild(vinoRow);
+            });
+        }
+
+        async function fetchCatas() {
+            const response = await fetch('/cata');
+            const catas = await response.json();
+            const catasList = document.getElementById('catas-list');
+
+            catas.forEach(cata => {
+                const cataItem = document.createElement('li');
+                cataItem.textContent = `Puntuación: ${cata.puntuacion}, Comentario: ${cata.comentario}`;
+                catasList.appendChild(cataItem);
+            });
+        }
+
+        fetchVinos();
+        fetchCatas();
+    </script>
+</body>
+</html>
